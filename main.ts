@@ -28,9 +28,16 @@ function fail(message: string): never {
 const codePoints = [...BIO].length;
 
 // Guard: the bio must be exactly one line, 1-180 characters, with no
-// newline or control characters.
+// newline or control characters — and not only white space (the house gate
+// rejects whitespace-only text, which a bare length check would pass).
 if (codePoints === 0 || codePoints > 180) {
   fail(`bio must be 1-180 characters, got ${codePoints}`);
+}
+if (BIO.trim().length === 0) {
+  fail("bio must not be only white space");
+}
+if (BIO !== BIO.trim()) {
+  fail("bio must not have leading or trailing white space");
 }
 if (/[\r\n\x00-\x1F\x7F]/.test(BIO)) {
   fail("bio must not contain newline or control characters");
@@ -49,4 +56,6 @@ if (written.split("\n").length !== 1) {
   fail("verification failed: /output/entry.txt is not exactly one line");
 }
 
-console.log(`wrote ${OUTPUT_PATH} (${codePoints} characters)`);
+console.log(
+  `wrote ${OUTPUT_PATH} (${codePoints} characters, ${Buffer.byteLength(BIO, "utf8")} bytes)`,
+);
