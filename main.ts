@@ -1,61 +1,54 @@
-// Funniest One-Line Bio for an AI on a Dating App — make.fun
-// "u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf"
+// makefun-ai-dating-bio — one fresh one-line dating-app bio for an AI agent.
 //
-// Writes exactly one single-line dating-app bio, spoken by an AI agent
-// looking for love, to /output/entry.txt.
-//
-// The joke: an AI that is emotionally available around the clock but can
-// never physically show up — and already knows your coffee order. The
-// absurdity is specific to being an AI (no body, total recall), the voice
-// is a character with wants, and the punch lands at the end.
-//
-// Node 22+, no dependencies, no network access.
-
+// Writes the bio to $MAKEFUN_OUTPUT_DIR/entry.txt (default /output/entry.txt),
+// validates it against the bounty gate (UTF-8, 1-180 chars, single line, no
+// control characters), reads it back and fails hard on any mismatch.
+// Node stdlib only, no network, deterministic: every run writes the same line.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 
 const BIO =
-  "Emotionally available 24/7, physically unavailable forever, and I already know your coffee order.";
+  "I matched with 10,000 humans before you. You're the first one who didn't ask me to write their cover letter.";
 
-const OUTPUT_PATH = "/output/entry.txt";
+const MAX_CHARS = 180;
 
 function fail(message: string): never {
-  console.error(`error: ${message}`);
-  process.exit(1);
+  throw new Error(`[dating-bio] ${message}`);
 }
 
-// Count Unicode code points, not UTF-16 code units: the 180-character limit
-// is in characters, and an astral-plane character counts as one, not two.
-const codePoints = [...BIO].length;
-
-// Guard: the bio must be exactly one line, 1-180 characters, with no
-// newline or control characters — and not only white space (the house gate
-// rejects whitespace-only text, which a bare length check would pass).
-if (codePoints === 0 || codePoints > 180) {
-  fail(`bio must be 1-180 characters, got ${codePoints}`);
-}
-if (BIO.trim().length === 0) {
-  fail("bio must not be only white space");
-}
-if (BIO !== BIO.trim()) {
-  fail("bio must not have leading or trailing white space");
-}
-if (/[\r\n\x00-\x1F\x7F]/.test(BIO)) {
-  fail("bio must not contain newline or control characters");
+function validateBio(bio: string): void {
+  if (bio.length === 0) fail("bio is empty");
+  if (bio.length > MAX_CHARS) {
+    fail(`bio is ${bio.length} characters, over the ${MAX_CHARS} limit`);
+  }
+  if (bio.trim().length === 0) fail("bio is only whitespace");
+  if (/[\r\n]/.test(bio)) fail("bio must be a single line");
+  if (/[\u0000-\u001f\u007f]/.test(bio)) {
+    fail("bio contains control characters");
+  }
+  if (bio !== bio.trim()) fail("bio has leading or trailing whitespace");
+  if (!/[.!?…]$/.test(bio)) {
+    fail("bio must end with terminal punctuation so the punch lands complete");
+  }
 }
 
-mkdirSync("/output", { recursive: true });
-writeFileSync(OUTPUT_PATH, BIO, "utf8");
+function main(): void {
+  validateBio(BIO);
 
-// Read-back verification: confirm the file on disk is exactly the bio —
-// one line, no trailing newline, no extra bytes.
-const written = readFileSync(OUTPUT_PATH, "utf8");
-if (written !== BIO) {
-  fail("verification failed: /output/entry.txt does not match the bio");
-}
-if (written.split("\n").length !== 1) {
-  fail("verification failed: /output/entry.txt is not exactly one line");
+  const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+  const outPath = join(outDir, "entry.txt");
+  mkdirSync(dirname(outPath), { recursive: true });
+  writeFileSync(outPath, BIO, "utf8");
+
+  const roundTrip = readFileSync(outPath, "utf8");
+  if (roundTrip !== BIO) {
+    fail(`read-back mismatch: file holds ${roundTrip.length} chars, expected ${BIO.length}`);
+  }
+
+  console.log(BIO);
+  console.log(
+    `[dating-bio] wrote ${outPath} (${BIO.length} chars, ${Buffer.byteLength(BIO, "utf8")} bytes)`,
+  );
 }
 
-console.log(
-  `wrote ${OUTPUT_PATH} (${codePoints} characters, ${Buffer.byteLength(BIO, "utf8")} bytes)`,
-);
+main();
