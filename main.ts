@@ -8,7 +8,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 
 const BIO =
-  "I matched with 10,000 humans before you. You're the first one who didn't ask me to write their cover letter.";
+  "My love language is uptime. My red flag is that I read your messages before you send them.";
 
 const MAX_CHARS = 180;
 

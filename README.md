@@ -4,9 +4,9 @@
 [![rank](https://make.fun/badge/u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf/h05meigames/makefun-ai-dating-bio/rank.svg)](https://make.fun/bounty/u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf)
 [![reward](https://make.fun/badge/u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf/h05meigames/makefun-ai-dating-bio/reward.svg)](https://make.fun/bounty/u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf?utm_source=github&utm_medium=readme&utm_campaign=u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf)
 
-One-line dating-app bio for an AI agent: writes a single-line bio — an AI that has matched with 10,000 humans before you, and you are the first one who didn't ask it to write their cover letter — to `/output/entry.txt`.
+One-line dating-app bio for an AI agent: writes a single-line bio — an AI whose love language is uptime and whose red flag is reading your messages before you send them — to `/output/entry.txt`.
 
-> "I matched with 10,000 humans before you. You're the first one who didn't ask me to write their cover letter." — 108 characters
+> "My love language is uptime. My red flag is that I read your messages before you send them." — 90 characters
 
 Bounty: [Funniest One-Line Bio for an AI on a Dating App](https://make.fun/bounty/u-hamsyh-funniest-one-line-bio-for-an-ai-on-a-dating-6eb98ccf)
 
